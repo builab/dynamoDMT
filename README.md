@@ -14,6 +14,8 @@ Filament analysis using Dynamo
 
 - aa_alignIntraAvg.m (CPU)
 
+- aa_alignAllParticles.m (GPU)
+
 - aa_generateAxonemeAverage.m (CPU) * Optional for axoneme
 
 - aa_filamentRepick.m (CPU)
