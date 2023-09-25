@@ -83,7 +83,7 @@ for idx = 1:noFilament
 
 end
 
-cd ..
+cd(prjPath)
 
 %% Calculate average
 newTemplate = newTemplate/noFilament;
