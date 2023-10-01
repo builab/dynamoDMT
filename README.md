@@ -1,5 +1,7 @@
 # dynamoDMT v0.2b
 
+There is a problem to use the correct Vll for cropping. To be fixed.
+
 Filament analysis using Dynamo
 
 - aa_setup.m (CPU)
