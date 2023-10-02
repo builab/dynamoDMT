@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Script to align repick particles
 % and transform all the alignment to an updated table.
-% dynamoDMT v0.11
+% dynamoDMT v0.2b
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%% Before Running Script %%%%%%%%%%
@@ -11,8 +11,10 @@ run /london/data0/software/dynamo/dynamo_activate.m
 % Change path to the correct directory
 prjPath = '/london/data0/20220404_TetraCU428_Tip_TS/ts/tip_CP_dPhi/';
 
-% Input
-filamentListFile = 'filamentList.csv';
+%% Input
+boxSize = 96;
+pixelSize = 8.48;
+filamentRepickListFile = 'filamentRepickList.csv';
 particleDir = sprintf('%sparticles_repick', prjPath);
 mw = 12; % Number of parallel workers to run
 gpu = [0:5]; % Alignment using gpu
@@ -22,11 +24,12 @@ starFileName = 'merged_particles_repick.star'; % star file name for merged parti
 tableOutFileName = 'merged_particles_repick_align.tbl'; % merged particles table all
 pAlnAll = 'pAlnRepickParticles';
 refMask = 'masks/mask_cp_tip_24.em';
-lowpass = 30; % 30Angstrom filter in fourier pixel
-zshift_limit = 5; % 4-nm limit
+finalLowpass = 30; % Now implemented using in Angstrom
+alnLowpass = 40; % Now implemented using Angstrom
+zshift_limit = 5; % Should be half the periodicity, 4-nm for tip CP, 8-nm for doublet
 
-
-filamentList = readcell(filamentListFile, 'Delimiter', ',');
+%%
+filamentList = readcell(filamentRepickListFile, 'Delimiter', ',');
 noFilament = length(filamentList);
 
 
@@ -64,8 +67,8 @@ dvput(pAlnAll,'file_mask',refMask)
 
 % set alignment parameters
 dvput(pAlnAll,'ite', [2 2]);
-dvput(pAlnAll,'dim', [96 96]);
-dvput(pAlnAll,'low', [20 20]);
+dvput(pAlnAll,'dim', [boxSize boxSize]);
+dvput(pAlnAll,'low', [round(pixelSize/alnLowpass*boxSize) round(pixelSize/alnLowpass*boxSize)]);
 dvput(pAlnAll,'cr', [15 6]);
 dvput(pAlnAll,'cs', [5 2]);
 dvput(pAlnAll,'ir', [15 6]);
@@ -87,4 +90,4 @@ aPath = ddb([pAlnAll ':a']);
 a = dread(aPath);
 tPath = ddb([pAlnAll ':t:ite=last']); % This makes convertion to Relion better
 dwrite(dread(tPath), tableOutFileName);
-dwrite(dynamo_bandpass(a,[1 lowpass])*(-1),['result_alnRepickParticles_INVERTED_all.em']);
+dwrite(dynamo_bandpass(a,[1 round(pixelSize/finalLowpass*boxSize)])*(-1),['result_alnRepickParticles_filt' num2str(finalLowpass) '_INVERTED_all.em']);

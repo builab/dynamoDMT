@@ -1,32 +1,36 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Script to align intra average of each doublet with a reference
 % and transform all the alignment to an updated table.
-% dynamoDMT v0.1
+% dynamoDMT v0.2b
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%% Before Running Script %%%%%%%%%%
-%%% Activate Dynamo
+%% Activate Dynamo
 run /london/data0/software/dynamo/dynamo_activate.m
 
 % Change path to the correct directory
 prjPath = '/london/data0/20220404_TetraCU428_Tip_TS/ts/tip_CP_dPhi/';
 
-% Input
+%% Input
+pixelSize = 8.48;
+boxSize = 96;
 filamentListFile = 'filamentList.csv';
 alnDir = sprintf('%sintraAln', prjPath);
 particleDir = sprintf('%sparticles', prjPath);
 mw = 12; % Number of parallel workers to run
 gpu = [0:5]; % Alignment using gpu
-template_name = 'reference_dPhi.em';
+template_name = 'reference_intraAln.em'; % If you have a better reference, use it instead
 tableFileName = 'merged_particles.tbl'; % merged particles table all
 tableOutFileName = 'merged_particles_align.tbl'; % merged particles table all
 starFileName = 'merged_particles.star'; % star file name for merged particles
 pAlnAll = 'pAlnAllParticles';
 refMask = 'masks/mask_cp_tip_24.em';
-lowpass = 27; % 30Angstrom filter in fourier pixel
+finalLowpass = 30; % Now implemented using in Angstrom
+alnLowpass = 40; % Now implemented using Angstrom
 zshift_limit = 10; % 8nm shift limit
 
 
+%%
 filamentList = readcell(filamentListFile, 'Delimiter', ',');
 noFilament = length(filamentList);
 
@@ -65,8 +69,8 @@ dvput(pAlnAll,'file_mask',refMask)
 
 % set alignment parameters
 dvput(pAlnAll,'ite', [2 2]);
-dvput(pAlnAll,'dim', [96 96]);
-dvput(pAlnAll,'low', [20 20]);
+dvput(pAlnAll,'dim', [boxSize/2 boxSize]); % Integer division of box size
+dvput(pAlnAll,'low', [round(boxSize*pixelSize/alnLowpass) round(boxSize*pixelSize/alnLowpass)]); % Low pass filter
 dvput(pAlnAll,'cr', [15 6]);
 dvput(pAlnAll,'cs', [5 2]);
 dvput(pAlnAll,'ir', [15 6]);
@@ -88,4 +92,4 @@ aPath = ddb([pAlnAll ':a']);
 a = dread(aPath);
 tPath = ddb([pAlnAll ':t:ite=last']); % This is correct but might not be prone to more error!!!
 dwrite(dread(tPath), tableOutFileName);
-dwrite(dynamo_bandpass(a,[1 lowpass])*(-1),['result_alnAllParticles_INVERTED_all.em']);
+dwrite(dynamo_bandpass(a,[1 round(boxSize*pixelSize/finalLowpass)])*(-1),['result_alnAllParticles_filt' num2str(finalLowpass) '_INVERTED_all.em']);

@@ -12,10 +12,19 @@
 module load matlab
 module load cuda-8.0.61-gcc-4.9.4-rv3d2jh
 
+# If you are very confident about your data. Not recommended to run everything all at once
 
-matlab -nodisplay < dynamoDMT/aa_crop_n_average.m
+matlab -nodisplay < dynamoDMT/aa_cropAndAverage.m
 matlab -nodisplay < dynamoDMT/aa_intraAln.m
 matlab -nodisplay < dynamoDMT/aa_alignIntraAvg.m
+#matlab -nodisplay < dynamoDMT/aa_generateAxonemeAvg.m
 matlab -nodisplay < dynamoDMT/aa_alignAllParticles.m
+matlab -nodisplay < dynamoDMT/aa_filamentRepick.m
+matlab -nodisplay < dynamoDMT/aa_intraAlnRepick.m
+matlab -nodisplay < dynamoDMT/aa_alignRepickAvg.m
+matlab -nodisplay < dynamoDMT/aa_alignRepickParticles.m
+
+
+
 
 

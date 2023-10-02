@@ -2,8 +2,8 @@
 #SBATCH --ntasks=1                
 #SBATCH --partition=titan
 #SBATCH --job-name=alignIntraAvg # Job name
-#SBATCH --error=aa_alignIntraAvg_all.err
-#SBATCH --output=aa_alignIntraAvg_all.out
+#SBATCH --error=aa_alignIntraAvg.err
+#SBATCH --output=aa_alignIntraAvg.out
 #SBATCH --cpus-per-task=12
 #SBATCH --gres=gpu:6
 #SBATCH --nodes=1
