@@ -49,6 +49,7 @@ for idx = 1:length(filamentList)
       	tCrop = tCrop(midIndex - 3: midIndex + 4, :);
   	end 
  
+
   	oa = daverage(targetFolder, 't', tCrop, 'fc', 1, 'mw', mw);
   	dwrite(dynamo_bandpass(oa.average, [1 round(pixelSize/lowpass*boxSize)]), [targetFolder '/template.em']);
   	if size(tCrop, 1) > 1 % dtplot error with one particle
@@ -68,6 +69,8 @@ for idx = 1:length(filamentList)
   % If cropping working well and more than minimum particles
   filamentListNew{end + 1, 1} = filamentList{idx};
 end
+
+
 
 %% 0.2b Writing new list
 if size(filamentListNew, 1) < size(filamentList, 1)
