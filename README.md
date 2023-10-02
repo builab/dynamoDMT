@@ -1,6 +1,7 @@
 # dynamoDMT v0.2b
 
-There is a problem to use the correct Vll for cropping. To be fixed.
+Very important to check tomograms.vll
+Check if filament Repick does reset the origin
 
 Filament analysis using Dynamo
 
