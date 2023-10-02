@@ -72,7 +72,21 @@ for idx = 1:nTomo
 
         % Testing this block
         t = m{i}.grepTable();
-        dwrite(t, [modelDir '/' tomoName '_' num2str(contour(i)) '.tbl']);
+        
+        % 0.2b addition
+        t(:,23) = contour(i);
+        if (size(t, 1) < minPartNo)
+        	disp(['Skip ' tomoName ' Contour ' num2str(contour(i)) ' with less than ' num2str(minPartNo) ' particles'])
+        	continue
+        end
+        % Add the good to the list
+        filamentList{end + 1, 1} = [tomoName '_' num2str(contour(i))];
+		dwrite(t, [modelDir '/' tomoName '_' num2str(contour(i)) '.tbl']);
+        
+        % Optional for visualization of table
+        dtplot(t, 'pf', 'oriented_positions');
+        view(-230,30);axis equal;
+        hold on;
         % Optional for visualization of table
         %dtplot(['particles/' tomoName '_' num2str(contour(i)) '/crop.tbl'], 'pf', 'oriented_positions');
     end
