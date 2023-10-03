@@ -83,11 +83,12 @@ for idx = 1:nTomo
 		dwrite(t, [modelDir '/' tomoName '_' num2str(contour(i)) '.tbl']);
         
         % Optional for visualization of table
-        dtplot(t, 'pf', 'oriented_positions');
-        view(-230,30);axis equal;
-        hold on;
+        %dtplot(t, 'pf', 'oriented_positions');
+        %view(-230,30);axis equal;
+        %hold on;
     end
-    print([modelDir '/' tomoName] , '-dpng');
+    % This can cause error as well.
+    %print([modelDir '/' tomoName] , '-dpng');
     close all;
     
     % Write the DynamoModel
