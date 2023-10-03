@@ -34,19 +34,20 @@ for idx = 1:length(filamentList)
   targetFolder = [particleDir '/' filamentList{idx}];
   disp(['Reading ' filamentList{idx}]);
   tImport = dread(tableName);
-  %tImport = tImport(1, :);		
+  tOne = tImport(1, :);		
 
   
   % Cropping subtomogram out
-  dtcrop(docFilePath, tImport, targetFolder, boxSize, 'mw', mw); % mw = number of workers to run
+  dtcrop(docFilePath, tOne, targetFolder, boxSize, 'mw', mw); % mw = number of workers to run
+  dwrite(tImport, [targetFolder '/full.tbl']); 
   
   % Plotting (might not be optimum since plotting everything here)
-  dtplot(tImport, 'pf', 'oriented_positions');
+  %dtplot(tImport, 'pf', 'oriented_positions');
   
 end
 
 % Merge only the list with particles_00001
-count = 0
+count = 1
 tCombine = [];
 mkdir([particleDir '/one']);
 for idx = 1:length(filamentList)
@@ -54,8 +55,8 @@ for idx = 1:length(filamentList)
   tOri = dread(tableName);
   if isfile([particleDir '/' filamentList{idx} '/particle_000001.em'])
 	disp([filamentList{idx} ' is valid']);
-	copyfile([particleDir '/' filamentList{idx} '/particle_000001.em'], [particleDir '/one/particle_' sprintf('%06d.em', count + 1)]);
-  	filamentListOne{count + 1, 1} = filamentList{idx};
+	copyfile([particleDir '/' filamentList{idx} '/particle_000001.em'], [particleDir '/one/particle_' sprintf('%06d.em', count)]);
+  	filamentListOne{count, 1} = filamentList{idx};
   	tCombine = [tCombine; tOri(1, :)];
   	tCombine (:, 1) = 1:size(tCombine, 1)';
   	dwrite(tOri(1,:), [particleDir '/' filamentList{idx} '/crop_one.tbl']);
