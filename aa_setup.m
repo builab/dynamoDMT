@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%
 % Set up the project
-% dynamoDMT v0.1
+% dynamoDMT v0.2b
 %%%%%%%%%%%%%%%%%%%%
 % Import tomogram & create catalog using the GUI
 % For asymetric wedge, you might want to check it using this guide
