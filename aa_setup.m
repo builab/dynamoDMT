@@ -22,12 +22,12 @@ run /london/data0/software/dynamo/dynamo_activate.m
 
 %%%%%%% Variables subject to change %%%%%%%%
 
-modDir = '/london/data0/20220404_TetraCU428_Tip_TS/ts/'; %Path to the directory containing all the TS_??? directories containing the reconstructed tomograms
-prjPath = '/london/data0/20220404_TetraCU428_Tip_TS/ts/tip_complex/'; %Path to the working/analyses/project directory
-modFileDelimiter = 'CU428*/TC.mod'; %Path to the model files from IMOD
-stringToBeRemoved = '/TC.mod';
-recSuffix = '_rec.mrc';
-apixel = '8.48'; %Pixel size
+modDir = '/london/data0/20220404_TetraCU428_Tip_TS/ts/';
+prjPath = '/london/data0/20220404_TetraCU428_Tip_TS/ts/tip_CP_dPhi/';
+modFileDelimiter = 'CU428*/tip_CP.mod';
+stringToBeRemoved = '/tip_CP.mod';
+recSuffix = '_rec';
+apixel = '8.48';
 
 %%%%%%%%% Do not change anything under here %%%%%%%%%%
 
@@ -48,14 +48,15 @@ catPath = sprintf('%scatalogs/c001', prjPath);
 docFilePath = sprintf('%scatalogs/tomograms.doc', prjPath); % This has to be consistent with the vll after catalog creation
 vllFilePath = sprintf('%scatalogs/tomograms.vll', prjPath);
 
-% Populate the necessary files into a single location. Use this directory
+%% Populate the necessary files into a single location. Use this directory
 % to create .vll and .doc files
 
 % $./vllAndDocScript.sh modDir modelDestination modelfile stringTobeRemoved docFilePath vllFilePath 
 
 pathToModelScript = fullfile(sprintf('%sdynamoDMT', prjPath), 'vllAndDocScript.sh');
 
-cmdStr = [pathToModelScript ' ' modDir ' ' listOfTomograms ' ' modelfile ' ' stringToBeRemoved ' ' docFilePath ' ' vllFilePath ' ' recSuffix ' ' apixel];
+% v0.2b change
+cmdStr = [pathToModelScript ' ' modDir ' ' listOfTomograms ' ' modelfile ' ' stringToBeRemoved ' ' docFilePath ' ' vllFilePath ' ' recSuffix '.mrc ' apixel];
 system(cmdStr);
 
 % Create new catalogue from vll file, delete old one
