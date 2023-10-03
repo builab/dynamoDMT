@@ -3,6 +3,8 @@
 % dynamoDMT v0.2b
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% Not optimum to catch & try if 1st particles is not generated
+
 %%%%%%%% Before Running Script %%%%%%%%%%
 %%% Activate Dynamo
 run /london/data0/software/dynamo/dynamo_activate.m
