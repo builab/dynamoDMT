@@ -47,7 +47,7 @@ cd(alnDir)
 % transform the corresponding table for all particles
 for idx = 1:noFilament
 	% v0.2b
-	if skipIntraAln > 1
+	if skipIntraAln > 0
 		aPath = ([particleDir '/' filamentList{idx} '/average.em']); % Read the path of the alignment project average
 		tPath = ([particleDir '/' filamentList{idx} '/crop.tbl']); 
 	else
